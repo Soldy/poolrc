@@ -98,7 +98,7 @@ exports.poolrc=function(){
             overdo--;
             if(1>overdo)
                 return true;
-        )
+        }
     }
     /*
      * @private
@@ -107,10 +107,7 @@ exports.poolrc=function(){
     let serial = 0;
     let index = [];
     let limit = 100;
-    let 
     //costructor
-    readDefault();
-    read();
 };
 
 
