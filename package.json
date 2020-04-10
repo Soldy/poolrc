@@ -1,0 +1,24 @@
+{
+  "name": "poolrc",
+  "version": "0.9.0-alpha",
+  "description": "pool manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Soldy/poolrc.git"
+  },
+  "keywords": [],
+  "author": "Soldy",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/Soldy/poolrc/issues"
+  },
+  "homepage": "https://github.com/Soldy/poolrc#readme",
+  "devDependencies": {
+    "interactiveConsole": "0.0.7-alpha0",
+    "nanoTest": "0.0.4-alpha"
+  }
+}
