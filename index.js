@@ -66,6 +66,22 @@ exports.poolrc=function(){
         return id;
     };
     /*
+     * @param {string} id 
+     * @param {string} val
+     * @public
+     * return {string} id
+     */
+    this.edit=function(val){
+        if(typeof id === "undefined")
+            return false;
+        if(typeof val === "undefined")
+            return false;
+        if(typeof db[id] === "undefined")
+            return false;
+        db[id] = val;
+        return true 
+    };
+    /*
      * @param {string}- id
      * @public
      */
@@ -103,7 +119,7 @@ exports.poolrc=function(){
     /*
      * @private
      */
-    let idb = {};
+    let db = {};
     let serial = 0;
     let index = [];
     let limit = 100;
