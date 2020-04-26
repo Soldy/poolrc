@@ -94,7 +94,7 @@ exports.poolrc=function(){
      * @private
      */
     let newId = function (){
-        let id = "a"+serital.toString()+"a";
+        let id = "a"+serial.toString()+"a";
         serial++;
         return id;
     }
