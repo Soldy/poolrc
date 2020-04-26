@@ -1,6 +1,6 @@
 {
   "name": "poolrc",
-  "version": "0.9.0-4alpha",
+  "version": "0.9.0-6alpha",
   "description": "pool manager",
   "main": "index.js",
   "scripts": {

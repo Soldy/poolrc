@@ -62,7 +62,7 @@ exports.poolrc=function(){
             return false;
         let id = newId();
         db[id] = val;
-        overflowcheck();
+        overflowCheck();
         return id;
     };
     /*
@@ -71,7 +71,7 @@ exports.poolrc=function(){
      * @public
      * return {string} id
      */
-    this.edit=function(val){
+    this.edit=function(id, val){
         if(typeof id === "undefined")
             return false;
         if(typeof val === "undefined")
@@ -82,13 +82,28 @@ exports.poolrc=function(){
         return true 
     };
     /*
+     * @param {string} id
+     * @public
+     */
+    this.del=function(id){
+        if(typeof id !== "string")
+            return false;
+        if(typeof db[id] === "undefined")
+            return false;
+        delete db[id];
+        return true;
+    };
+    /*
      * @param {string}- id
      * @public
      */
     this.check=function(id){
-        if((typeof id !== "string") ||(typeof config[id] !== "undefined"))
-            return true;
-        return false;
+        if(
+            (typeof id !== "string") ||
+            (typeof db[id] === "undefined")
+        )
+            return false;
+        return true;
     }
     /*
      * @private
@@ -106,7 +121,7 @@ exports.poolrc=function(){
     }
     let overflowCheck = function (){
         let size = count();
-        if (limit > count)
+        if (limit > size)
             return true;
         let overdo = count - limit;
         for(let i in db){
