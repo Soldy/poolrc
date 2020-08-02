@@ -5,7 +5,26 @@ const fs = require("fs");
 
 exports.poolrc=function(){
     /*
+     * @param {string} name
+     * @param {string} value
      * @public
+     * @var boolean
+     */
+    this.setup = function(name,value){
+        if(
+            (name === 'limit')&&
+            (value === parseInt(value))&&
+            (value > -1)
+        ){
+
+        }
+        return false;
+
+    }
+    /*
+     * @param {integer} size
+     * @public
+     * @var mixed
      */
     this.first = function (size){
         if(typeof size === "undefined")
@@ -21,7 +40,9 @@ exports.poolrc=function(){
         return out;
     }
     /*
+     * @param {integer} size
      * @public
+     * @var mixed
      */
     this.last = function (size){
         if(typeof size === "undefined")
@@ -37,6 +58,7 @@ exports.poolrc=function(){
     }
     /*
      * @public
+     * @var object
      */
     this.all=function(){
         return db;
@@ -44,6 +66,7 @@ exports.poolrc=function(){
     /*
      * @param {string} id
      * @public
+     * @var mixed
      */
     this.get=function(id){
         if(typeof id !== "string")
@@ -55,7 +78,7 @@ exports.poolrc=function(){
     /*
      * @param {string} val
      * @public
-     * return {string} id
+     * @var string
      */
     this.add=function(val){
         if(typeof val === "undefined")
@@ -69,7 +92,7 @@ exports.poolrc=function(){
      * @param {string} id 
      * @param {string} val
      * @public
-     * return {string} id
+     * @var string
      */
     this.edit=function(id, val){
         if(typeof id === "undefined")
@@ -84,6 +107,7 @@ exports.poolrc=function(){
     /*
      * @param {string} id
      * @public
+     * @var boolean
      */
     this.del=function(id){
         if(typeof id !== "string")
@@ -96,6 +120,7 @@ exports.poolrc=function(){
     /*
      * @param {string}- id
      * @public
+     * @var boolean
      */
     this.check=function(id){
         if(
@@ -113,13 +138,23 @@ exports.poolrc=function(){
         serial++;
         return id;
     }
+    /*
+     * @private
+     * @var integer
+     */
     let count = function (){
         let out = 0;
         for(let i in db)
             out++;
         return out;
     }
+    /*
+     * @private
+     * @var boolean
+     */
     let overflowCheck = function (){
+        if(limit === 0)
+            return true;
         let size = count();
         if (limit > size)
             return true;
@@ -135,8 +170,17 @@ exports.poolrc=function(){
      * @private
      */
     let db = {};
+    /*
+     * @private
+     */
     let serial = 0;
+    /*
+     * @private
+     */
     let index = [];
+    /*
+     * @private
+     */
     let limit = 100;
     //costructor
 };
