@@ -29,7 +29,7 @@ exports.poolrc=function(){
     this.first = function (size){
         if(typeof size === "undefined")
             size = 1;
-        let oiut = {};
+        let out = [];
         for(let i in db){
             out[i]=db[i];
             size --;
@@ -47,10 +47,10 @@ exports.poolrc=function(){
     this.last = function (size){
         if(typeof size === "undefined")
             size = 1;
-        let oiut = {};
+        let out = [];
         let notout =  count()-size;
         for(let i in db){
-            noutout --;
+            notout --;
             if(1>notout)
                 out[i]=db[i];
         }
