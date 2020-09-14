@@ -1,33 +1,14 @@
-"use strict"
-const fs = require("fs");
+'use strict';
 
 
-
-exports.poolrc=function(){
-    /*
-     * @param {string} name
-     * @param {string} value
-     * @public
-     * @var boolean
-     */
-    this.setup = function(name,value){
-        if(
-            (name === 'limit')&&
-            (value === parseInt(value))&&
-            (value > -1)
-        ){
-
-        }
-        return false;
-
-    }
+exports.poolrc=function(limitIn){
     /*
      * @param {integer} size
      * @public
      * @var mixed
      */
     this.first = function (size){
-        if(typeof size === "undefined")
+        if(typeof size === 'undefined')
             size = 1;
         let out = [];
         for(let i in db){
@@ -38,14 +19,14 @@ exports.poolrc=function(){
 
         }
         return out;
-    }
+    };
     /*
      * @param {integer} size
      * @public
      * @var mixed
      */
     this.last = function (size){
-        if(typeof size === "undefined")
+        if(typeof size === 'undefined')
             size = 1;
         let out = [];
         let notout =  count()-size;
@@ -55,13 +36,33 @@ exports.poolrc=function(){
                 out[i]=db[i];
         }
         return out;
-    }
+    };
+    /*
+     * @public
+     * @var object
+     */
+    this.full=function(){
+        return db;
+    };
     /*
      * @public
      * @var object
      */
     this.all=function(){
-        return db;
+        let list = [];
+        for (let i in db)
+            list.push(db[i]);
+        return list;
+    };
+    /*
+     * @public
+     * @var object
+     */
+    this.list=function(){
+        let list = [];
+        for (let i in db)
+            list.push(i);
+        return list;
     };
     /*
      * @param {string} id
@@ -69,10 +70,11 @@ exports.poolrc=function(){
      * @var mixed
      */
     this.get=function(id){
-        if(typeof id !== "string")
+        if(typeof id !== 'string')
             return false;
-        if(typeof db[id] === "undefined")
+        if(typeof db[id] === 'undefined')
             return undefined;
+        updateLastGet();
         return db[id];
     };
     /*
@@ -81,10 +83,11 @@ exports.poolrc=function(){
      * @var string
      */
     this.add=function(val){
-        if(typeof val === "undefined")
+        if(typeof val === 'undefined')
             return false;
         let id = newId();
         db[id] = val;
+        updateLastSet();
         overflowCheck();
         return id;
     };
@@ -95,14 +98,15 @@ exports.poolrc=function(){
      * @var string
      */
     this.edit=function(id, val){
-        if(typeof id === "undefined")
+        if(typeof id === 'undefined')
             return false;
-        if(typeof val === "undefined")
+        if(typeof val === 'undefined')
             return false;
-        if(typeof db[id] === "undefined")
+        if(typeof db[id] === 'undefined')
             return false;
         db[id] = val;
-        return true 
+        updateLastSet();
+        return true; 
     };
     /*
      * @param {string} id
@@ -110,11 +114,12 @@ exports.poolrc=function(){
      * @var boolean
      */
     this.del=function(id){
-        if(typeof id !== "string")
+        if(typeof id !== 'string')
             return false;
-        if(typeof db[id] === "undefined")
+        if(typeof db[id] === 'undefined')
             return false;
         delete db[id];
+        updateLastSet();
         return true;
     };
     /*
@@ -124,30 +129,84 @@ exports.poolrc=function(){
      */
     this.check=function(id){
         if(
-            (typeof id !== "string") ||
-            (typeof db[id] === "undefined")
+            (typeof id !== 'string') ||
+            (typeof db[id] === 'undefined')
         )
             return false;
         return true;
-    }
+    };
+    /*
+     * @public
+     * @var integer
+     */
+    this.size=function(){
+        return count();
+    };
+    /*
+     * @public
+     * @var object
+     */
+    this.stats=function(){
+        count();
+        return stats;
+    };
     /*
      * @private
      */
     let newId = function (){
-        let id = "a"+serial.toString()+"a";
+        let id = 'a'+serial.toString()+'a';
         serial++;
         return id;
-    }
+    };
+    /*
+     * @private
+     * @var boolean
+     */
+    let updateLastGet = function (){
+        stats.lastSet = (+new Date);
+        return true;
+    };
+    /*
+     * @private
+     * @var boolean
+     */
+    let updateLastSet = function (){
+        stats.lastSet = (+new Date);
+        return true;
+    };
     /*
      * @private
      * @var integer
      */
     let count = function (){
+        if(stats.lastCount > stats.lastSet)
+            return stats.count;
         let out = 0;
-        for(let i in db)
+        let index = 0;
+        for(let i in db){
             out++;
+            index+=i.length;
+        }
+        stats.count     = count;
+        stats.index     = index;
+        stats.bytes     = JSON.stringify(db).toString().length;
+        stats.lastCount = (+new Date);
         return out;
-    }
+    };
+    /*
+     * @private
+     * @var object
+     *
+     */
+    let stats = {
+        count:0,
+        bytes:0,
+        index:0,
+        start:(+new Date),
+        lastSet:(+new Date),
+        lastGet:(+new Date),
+        lastCount:(+new Date)
+    };
     /*
      * @private
      * @var boolean
@@ -165,7 +224,7 @@ exports.poolrc=function(){
             if(1>overdo)
                 return true;
         }
-    }
+    };
     /*
      * @private
      */
@@ -177,11 +236,13 @@ exports.poolrc=function(){
     /*
      * @private
      */
-    let index = [];
-    /*
-     * @private
-     */
     let limit = 100;
+    if (
+       (typeof limitIn !== 'undefined')&&
+       (parseInt(limitIn) === limitIn)&&
+       (limitIn > 0)
+    )
+        limit = limitIn;
     //costructor
 };
 
