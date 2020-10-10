@@ -1,6 +1,6 @@
 {
   "name": "poolrc",
-  "version": "0.9.9-alpha",
+  "version": "0.9.9-alpha2",
   "description": "pool manager",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,6 @@
   "homepage": "https://github.com/Soldy/poolrc#readme",
   "devDependencies": {
     "interactiveConsole": "0.0.7-alpha0",
-    "nanoTest": "^0.9.9-alpha-5",
-    "eslint": "^7.9.0"
+    "nanoTest": "^0.9.9-beta5"
   }
 }
