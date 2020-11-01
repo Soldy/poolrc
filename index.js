@@ -12,7 +12,7 @@ exports.poolrc=function(limitIn){
             size = 1;
         let out = [];
         for(let i in db){
-            out[i]=db[i];
+            out.push(db[i]);
             size --;
             if(1>size)
                 break;
@@ -33,7 +33,7 @@ exports.poolrc=function(limitIn){
         for(let i in db){
             notout --;
             if(1>notout)
-                out[i]=db[i];
+                out.push(db[i]);
         }
         return out;
     };
