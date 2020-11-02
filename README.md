@@ -1,40 +1,38 @@
-[![Build Status](https://travis-ci.org/Soldy/assertrc.svg?branch=master)](https://travis-ci.org/Soldy/assertrc)
+[![Build Status](https://travis-ci.org/Soldy/poolrc.svg?branch=master)](https://travis-ci.org/Soldy/poolrc)
 
-# assertrc (assert real challange)
+# poolrc (poolrt  pool real challange)
 
-The assertrc is an alternative shorthanded assert collection.
+The poolrc data pooling tool for science projects
 
 
 ##init
 
 ```javascript
 
-const assertManager = new (require('./index.js')).assertBase();
+const poolManager = new (require('./index.js')).poolrtBase()
 
 ```
 
 
-## simple test
+## add data pool
+
 
 ```javascript
-
-assertManager.check(
-    '1', // value
-    `===`, // rule
-    '1' // sample
+poolManager.set(
+    id,
+    data
 );
 
 ```
 
 
-## simple test upload
+## get data 
 
 
 ```javascript
 
-assertManager.tests({
-    'id':'value',
-    'id2':'value2'
+poolManager.get({
+    id
 });
 
 
