@@ -4,7 +4,7 @@ const nanoTest  = new (require('nanoTest')).test({
 const poolrc = new (require('./index.js')).poolrc(100);
 
 nanoTest.add(
-    'check size',
+    'size',
     {
         'function':poolrc.size,
         'options':[]
@@ -14,7 +14,18 @@ nanoTest.add(
 );
 
 nanoTest.add(
-    'check test set',
+    'empty',
+    {
+        'function':poolrc.empty,
+        'options':[]
+    },
+    '===',
+    true
+);
+
+
+nanoTest.add(
+    'set',
     {
         'function':poolrc.add,
         'options':['test1']
@@ -24,7 +35,7 @@ nanoTest.add(
 );
 
 nanoTest.add(
-    'check test1 size',
+    'size',
     {
         'function':poolrc.size,
         'options':['']
@@ -32,9 +43,19 @@ nanoTest.add(
     '===',
     1
 );
-
 nanoTest.add(
-    'check test all',
+    'empty',
+    {
+        'function':poolrc.empty,
+        'options':[]
+    },
+    '===',
+    false
+);
+
+ 
+nanoTest.add(
+    'all',
     {
         'function':poolrc.all
     },
@@ -44,7 +65,7 @@ nanoTest.add(
 
 
 nanoTest.add(
-    'check test full ',
+    'full',
     {
         'function':poolrc.full,
         'options':[]
@@ -54,7 +75,7 @@ nanoTest.add(
 );
 
 nanoTest.add(
-    'check del',
+    'del',
     {
         'function':poolrc.del,
         'options':['a0a']
@@ -64,7 +85,7 @@ nanoTest.add(
 );
 
 nanoTest.add(
-    'check test1 check ',
+    'check ',
     {
         'function':poolrc.check,
         'options':['test1']

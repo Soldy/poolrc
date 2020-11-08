@@ -141,9 +141,10 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @public
+     * @return {boolean}
      */
     this.empty=function(){
-        if(1 > count())
+        if( 0 === parseInt(count()))
              return true;
         return false;
     };
@@ -200,7 +201,7 @@ exports.poolrc=function(limitIn){
             out++;
             index+=i.length;
         }
-        stats.count     = count;
+        stats.count     = out;
         stats.index     = index;
         stats.bytes     = JSON.stringify(db).toString().length;
         stats.lastCount = (+new Date);
