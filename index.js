@@ -141,6 +141,14 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @public
+     */
+    this.empty=function(){
+        if(1 > count())
+             return true;
+        return false;
+    };
+    /*
+     * @public
      * @return integer
      */
     this.size=function(){
