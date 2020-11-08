@@ -1,11 +1,15 @@
 'use strict';
 
-
+/*
+ * @param {integer} limitIn //maximum size of package
+ * @prototype
+ */
+ 
 exports.poolrc=function(limitIn){
     /*
      * @param {integer} size
      * @public
-     * @var mixed
+     * @return {mixed}
      */
     this.first = function (size){
         if(typeof size === 'undefined')
@@ -23,7 +27,7 @@ exports.poolrc=function(limitIn){
     /*
      * @param {integer} size
      * @public
-     * @var mixed
+     * @return {mixed}
      */
     this.last = function (size){
         if(typeof size === 'undefined')
@@ -39,14 +43,14 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @public
-     * @var object
+     * @return {object}
      */
     this.full=function(){
         return db;
     };
     /*
      * @public
-     * @var object
+     * @return {object}
      */
     this.all=function(){
         let list = [];
@@ -56,7 +60,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @public
-     * @var object
+     * @return {object}
      */
     this.list=function(){
         let list = [];
@@ -67,7 +71,7 @@ exports.poolrc=function(limitIn){
     /*
      * @param {string} id
      * @public
-     * @var mixed
+     * @return {mixed}
      */
     this.get=function(id){
         if(typeof id !== 'string')
@@ -80,7 +84,7 @@ exports.poolrc=function(limitIn){
     /*
      * @param {string} val
      * @public
-     * @var string
+     * @return {string}
      */
     this.add=function(val){
         if(typeof val === 'undefined')
@@ -95,7 +99,7 @@ exports.poolrc=function(limitIn){
      * @param {string} id 
      * @param {string} val
      * @public
-     * @var string
+     * @return {string}
      */
     this.edit=function(id, val){
         if(typeof id === 'undefined')
@@ -111,7 +115,7 @@ exports.poolrc=function(limitIn){
     /*
      * @param {string} id
      * @public
-     * @var boolean
+     * @return {boolean}
      */
     this.del=function(id){
         if(typeof id !== 'string')
@@ -125,7 +129,7 @@ exports.poolrc=function(limitIn){
     /*
      * @param {string}- id
      * @public
-     * @var boolean
+     * @return {boolean}
      */
     this.check=function(id){
         if(
@@ -137,14 +141,14 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @public
-     * @var integer
+     * @return integer
      */
     this.size=function(){
         return count();
     };
     /*
      * @public
-     * @var object
+     * @return {object}
      */
     this.stats=function(){
         count();
@@ -152,6 +156,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
+     * @return {string}
      */
     let newId = function (){
         let id = 'a'+serial.toString()+'a';
@@ -160,7 +165,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
-     * @var boolean
+     * @return {boolean}
      */
     let updateLastGet = function (){
         stats.lastSet = (+new Date);
@@ -168,7 +173,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
-     * @var boolean
+     * @return {boolean}
      */
     let updateLastSet = function (){
         stats.lastSet = (+new Date);
@@ -176,7 +181,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
-     * @var integer
+     * @return {integer}
      */
     let count = function (){
         if(stats.lastCount > stats.lastSet)
@@ -195,7 +200,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
-     * @var object
+     * @var {dictonary}
      *
      */
     let stats = {
@@ -209,7 +214,7 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
-     * @var boolean
+     * @return {boolean}
      */
     let overflowCheck = function (){
         if(limit === 0)
@@ -227,14 +232,17 @@ exports.poolrc=function(limitIn){
     };
     /*
      * @private
+     * @var {dictonary}
      */
     let db = {};
     /*
      * @private
+     * @var {integer}
      */
     let serial = 0;
     /*
      * @private
+     * @var {integer}
      */
     let limit = 100;
     if (
