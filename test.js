@@ -43,6 +43,17 @@ nanoTest.add(
     '===',
     1
 );
+
+nanoTest.add(
+    'stats',
+    {
+        'function':poolrc.stats,
+        'options':['']
+    },
+    '!==',
+    false
+);
+
 nanoTest.add(
     'empty',
     {
