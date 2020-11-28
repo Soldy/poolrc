@@ -5,7 +5,7 @@
 The poolrc data pooling tool for science projects
 
 
-##init
+## init
 
 ```javascript
 
