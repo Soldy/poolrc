@@ -2,7 +2,7 @@ const nanoTest  = new (require('nanoTest')).test({
     'debugPrint' : 'short'
 });
 const poolrc = new (require('./index.js')).poolrc(100);
-
+var newId = '';
 nanoTest.add(
     'size',
     {
@@ -25,13 +25,16 @@ nanoTest.add(
 
 
 nanoTest.add(
-    'set',
+    'add',
     {
-        'function':poolrc.add,
+        'function': function(v){
+              newId = poolrc.add(v);
+              return newId;
+        },
         'options':['test1']
     },
-    '===',
-    'a0a'
+    '!==',
+    false
 );
 
 nanoTest.add(
@@ -64,6 +67,15 @@ nanoTest.add(
     false
 );
 
+nanoTest.add(
+    'list',
+    {
+        'function':poolrc.list
+    },
+    '!==',
+    false
+);
+
  
 nanoTest.add(
     'all',
@@ -81,18 +93,19 @@ nanoTest.add(
         'function':poolrc.full,
         'options':[]
     },
-    'j==',
-    {'a0a':'test1'}
+    '!==',
+    false
 );
 
 nanoTest.add(
     'del',
     {
         'function':poolrc.del,
-        'options':['a0a']
+        'options':[newId]
     },
     '===',
-    true
+    false
+
 );
 
 nanoTest.add(
@@ -105,3 +118,4 @@ nanoTest.add(
     false 
 );
 nanoTest.run();
+console.log(newId);

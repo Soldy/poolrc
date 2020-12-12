@@ -145,7 +145,7 @@ exports.poolrc=function(limitIn){
      */
     this.empty=function(){
         if( 0 === parseInt(count()))
-             return true;
+            return true;
         return false;
     };
     /*
@@ -167,8 +167,17 @@ exports.poolrc=function(limitIn){
      * @private
      * @return {string}
      */
+    let randomChar=function(){
+        return Math.floor(
+            Math.random()*36
+        ).toString(36);
+    };
+    /*
+     * @private
+     * @return {string}
+     */
     let newId = function (){
-        let id = 'a'+serial.toString()+'a';
+        let id = randomChar()+serial.toString(32)+randomChar();
         serial++;
         return id;
     };
@@ -255,7 +264,7 @@ exports.poolrc=function(limitIn){
      */
     let limit = 100;
     if (
-       (typeof limitIn !== 'undefined')&&
+        (typeof limitIn !== 'undefined')&&
        (parseInt(limitIn) === limitIn)&&
        (limitIn > 0)
     )
