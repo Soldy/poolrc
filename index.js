@@ -164,6 +164,13 @@ exports.poolrc=function(limitIn){
         return stats;
     };
     /*
+     * @public
+     * @return {void}
+     */
+    this.drop=function(){
+        drop();
+    };
+    /*
      * @private
      * @return {string}
      */
@@ -247,6 +254,13 @@ exports.poolrc=function(limitIn){
             if(1>overdo)
                 return true;
         }
+    };
+    /*
+     * @private
+     * @return {void}
+     */
+    let drop = function () {
+        db = {};
     };
     /*
      * @private
