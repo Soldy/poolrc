@@ -20,7 +20,7 @@ coverage
 bower_components
 .lock-wscript
 build/Release
-
+.github/
 node_modules/
 jspm_packages/
 typings/
