@@ -101,6 +101,22 @@ exports.poolrc=function(limitIn){
      * @public
      * @return {string}
      */
+    this.set=function(id, val){
+        if(typeof id === 'undefined')
+            return false;
+        if(typeof val === 'undefined')
+            return false;
+        db[id] = val;
+        updateLastSet();
+        overflowCheck();
+        return true; 
+    };
+    /*
+     * @param {string} id 
+     * @param {string} val
+     * @public
+     * @return {string}
+     */
     this.edit=function(id, val){
         if(typeof id === 'undefined')
             return false;
