@@ -78,8 +78,7 @@ exports.poolrc=function(limitIn){
             return false;
         if(typeof db[id] === 'undefined')
             return undefined;
-        updateLastGet();
-        return db[id];
+        return get(id);
     };
     /*
      * @param {string} val
@@ -89,11 +88,7 @@ exports.poolrc=function(limitIn){
     this.add=function(val){
         if(typeof val === 'undefined')
             return false;
-        let id = newId();
-        db[id] = val;
-        updateLastSet();
-        overflowCheck();
-        return id;
+        return add(val);
     };
     /*
      * @param {string} id 
@@ -106,10 +101,7 @@ exports.poolrc=function(limitIn){
             return false;
         if(typeof val === 'undefined')
             return false;
-        db[id] = val;
-        updateLastSet();
-        overflowCheck();
-        return true; 
+        return set(id, val);
     };
     /*
      * @param {string} id 
@@ -187,6 +179,15 @@ exports.poolrc=function(limitIn){
         drop();
     };
     /*
+     * @param {object}
+     * @public
+     * @return {boolean}
+     */
+    this.importing = function(importDb){
+        db = importDb;
+        return true;
+    };
+    /*
      * @private
      * @return {string}
      */
@@ -244,6 +245,12 @@ exports.poolrc=function(limitIn){
      * @var {dictonary}
      *
      */
+    let dbHits = {};
+    /*
+     * @private
+     * @var {dictonary}
+     *
+     */
     let stats = {
         count:0,
         bytes:0,
@@ -293,6 +300,58 @@ exports.poolrc=function(limitIn){
      * @var {integer}
      */
     let limit = 100;
+
+
+    /*
+     * @param {string} id
+     * @pirivate
+     */
+    const hitUpdate = function(id){
+        if(typeof dbHits[id] === 'undefined'){
+            dbHits[id] = {
+                first : Math.round(Date.now()/1000),
+                last  : Math.round(Date.now()/1000),
+                hit   : 0
+            };
+        }else{
+            dbHits[id].last = Math.round(Date.now()/1000);
+            dbHits[id].hit++;
+        }
+    };
+    /*
+     * @param {string} val
+     * @public
+     * @return {string}
+     */
+    const add=function(val){
+        let id = newId();
+        set(id, val);
+        return id;
+    };
+
+    /*
+     * @param {string} id 
+     * @param {string} val
+     * @pirivate
+     * @return {bool}
+     */
+    const set=function(id, val){
+        db[id] = val;
+        hitUpdate(id);
+        updateLastSet();
+        overflowCheck();
+        return true; 
+    };
+    /*
+     * @param {string} id
+     * @public
+     * @return {mixed}
+     */
+    const get=function(id){
+        hitUpdate(id);
+        updateLastGet();
+        return db[id];
+    };
     if (
         (typeof limitIn !== 'undefined')&&
        (parseInt(limitIn) === limitIn)&&
