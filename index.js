@@ -1,3 +1,6 @@
+/*
+ *  @Soldy\poolrc\2021.01.16\GPL3
+ */
 'use strict';
 
 /*
