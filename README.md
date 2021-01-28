@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/Soldy/poolrc.svg?branch=master)](https://travis-ci.org/Soldy/poolrc)
 
-# poolrc (poolrt  pool real challange)
+# poolrc 
 
-The poolrc data pooling tool for science projects
+The poolrc is a data pooling tool for science projects
 
 
 ## init
