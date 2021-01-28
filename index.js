@@ -7,7 +7,6 @@
  * @param {integer} limitIn //maximum size of package
  * @prototype
  */
- 
 exports.poolrc=function(limitIn){
     /*
      * @param {integer} size
@@ -310,14 +309,15 @@ exports.poolrc=function(limitIn){
      * @pirivate
      */
     const hitUpdate = function(id){
+        const now = Math.round(Date.now()/1000);
         if(typeof dbHits[id] === 'undefined'){
             dbHits[id] = {
-                first : Math.round(Date.now()/1000),
-                last  : Math.round(Date.now()/1000),
+                first : parseInt(now),
+                last  : parseInt(now),
                 hit   : 0
             };
         }else{
-            dbHits[id].last = Math.round(Date.now()/1000);
+            dbHits[id].last = now;
             dbHits[id].hit++;
         }
     };
