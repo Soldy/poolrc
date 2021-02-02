@@ -1,8 +1,8 @@
 const nanoTest  = new (require('nanoTest')).test({
     'debugPrint' : 'short'
 });
-const poolrc = new (require('./index.js')).poolrc(100);
-var newId = '';
+const poolrc = new (require('./index.js')).base(100);
+let newId = '';
 nanoTest.add(
     'size',
     {

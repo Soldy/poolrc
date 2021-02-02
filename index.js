@@ -7,7 +7,7 @@
  * @param {integer} limitIn //maximum size of package
  * @prototype
  */
-exports.poolrc=function(limitIn){
+const poolBase=function(limitIn){
     /*
      * @param {integer} size
      * @public
@@ -364,4 +364,4 @@ exports.poolrc=function(limitIn){
     //costructor
 };
 
-
+exports.base = poolBase;
