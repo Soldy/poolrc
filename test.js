@@ -28,8 +28,8 @@ nanoTest.add(
     'add',
     {
         'function': function(v){
-              newId = poolrc.add(v);
-              return newId;
+            newId = poolrc.add(v);
+            return newId;
         },
         'options':['test1']
     },
@@ -118,4 +118,3 @@ nanoTest.add(
     false 
 );
 nanoTest.run();
-console.log(newId);
