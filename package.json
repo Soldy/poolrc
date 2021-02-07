@@ -1,6 +1,6 @@
 {
   "name": "poolrc",
-  "version": "0.9.9-alpha7",
+  "version": "1.0.0-rc4",
   "description": "pool manager",
   "main": "index.js",
   "scripts": {
@@ -11,14 +11,21 @@
     "url": "https://github.com/Soldy/poolrc.git"
   },
   "keywords": [],
-  "author": "Soldy",
-  "license": "GPLv3",
+  "author": "Soldy <npmjs@gidigi.com> (http://gidigi.com)",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/Soldy/poolrc/issues"
   },
   "homepage": "https://github.com/Soldy/poolrc#readme",
   "devDependencies": {
-    "interactiveConsole": "0.0.7-alpha0",
-    "nanoTest": "^0.9.9-beta9"
+    "assertrc": "^1.0.2-rc2",
+    "consolebarrc": "0.0.2-rc3",
+    "consolestdiorc": "0.0.2-rc2",
+    "consolestylerc": "0.0.2-rc2",
+    "nano-test-output-cli": "^0.9.9-beta17",
+    "nanoTest": "^0.9.9-beta15",
+    "sandboxrc": "^0.9.9-beta15",
+    "setuprc": "^0.9.9-beta16",
+    "typehardeningrc": "^0.9.9-beta15"
   }
 }
