@@ -1,5 +1,5 @@
 /*
- *  @Soldy\poolrc\2021.01.16\GPL3
+ *  @Soldy\poolrc\2021.02.07\GPL3
  */
 'use strict';
 
@@ -186,6 +186,8 @@ const poolBase=function(limitIn){
      * @return {boolean}
      */
     this.importing = function(importDb){
+        if(typeof importDb.all === 'function')
+            db = importDb.all();
         db = importDb;
         return true;
     };
@@ -212,7 +214,7 @@ const poolBase=function(limitIn){
      * @return {boolean}
      */
     let updateLastGet = function (){
-        stats.lastSet = (+new Date);
+        stats.lastSet = Date.now();
         return true;
     };
     /*
@@ -220,7 +222,7 @@ const poolBase=function(limitIn){
      * @return {boolean}
      */
     let updateLastSet = function (){
-        stats.lastSet = (+new Date);
+        stats.lastSet = Date.now();
         return true;
     };
     /*
@@ -239,7 +241,7 @@ const poolBase=function(limitIn){
         stats.count     = out;
         stats.index     = index;
         stats.bytes     = JSON.stringify(db).toString().length;
-        stats.lastCount = (+new Date);
+        stats.lastCount = Date.now();
         return out;
     };
     /*
@@ -248,6 +250,7 @@ const poolBase=function(limitIn){
      *
      */
     let dbHits = {};
+    let initStamp = Date.now();
     /*
      * @private
      * @var {dictonary}
@@ -257,10 +260,10 @@ const poolBase=function(limitIn){
         count:0,
         bytes:0,
         index:0,
-        start:(+new Date),
-        lastSet:(+new Date),
-        lastGet:(+new Date),
-        lastCount:(+new Date)
+        start:parseInt(initStamp),
+        lastSet:parseInt(initStamp),
+        lastGet:parseInt(initStamp),
+        lastCount:parseInt(initStamp)
     };
     /*
      * @private
