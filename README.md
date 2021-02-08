@@ -43,13 +43,27 @@ let response = poolManager.set(
 
 ```javascript
 
-poolManager.get({
+let response = poolManager.get({
     name
 });
+
+// response {any}
 
 
 ```
 
+## edit data in the pool
+
+
+```javascript
+let response = poolManager.edit(
+    name,
+    data
+);
+
+// response {bool} - faild if the set not exist
+
+```
 
 ## check data exist the pool
 
@@ -124,7 +138,7 @@ let response = poolManager.drop();
 
 ```javascript
 
-let response poolManager.empty();
+let response = poolManager.empty();
 
 // boolean
 
