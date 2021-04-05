@@ -17,8 +17,8 @@ const poolBase=function(limitIn){
         if(typeof size === 'undefined')
             size = 1;
         let out = [];
-        for(let i in db){
-            out.push(db[i]);
+        for(let i in _db){
+            out.push(_db[i]);
             size --;
             if(1>size)
                 break;
@@ -35,11 +35,11 @@ const poolBase=function(limitIn){
         if(typeof size === 'undefined')
             size = 1;
         let out = [];
-        let notout =  count()-size;
-        for(let i in db){
+        let notout =  _count()-size;
+        for(let i in _db){
             notout --;
             if(1>notout)
-                out.push(db[i]);
+                out.push(_db[i]);
         }
         return out;
     };
@@ -48,7 +48,7 @@ const poolBase=function(limitIn){
      * @return {object}
      */
     this.full=function(){
-        return db;
+        return {..._db};
     };
     /*
      * @public
@@ -56,8 +56,8 @@ const poolBase=function(limitIn){
      */
     this.all=function(){
         let list = [];
-        for (let i in db)
-            list.push(db[i]);
+        for (let i in _db)
+            list.push(_db[i]);
         return list;
     };
     /*
@@ -66,8 +66,8 @@ const poolBase=function(limitIn){
      */
     this.list=function(){
         let list = [];
-        for (let i in db)
-            list.push(i);
+        for (let i in _db)
+            list.push(_db[i]);
         return list;
     };
     /*
@@ -78,9 +78,9 @@ const poolBase=function(limitIn){
     this.get=function(id){
         if(typeof id !== 'string')
             return false;
-        if(typeof db[id] === 'undefined')
+        if(typeof _db[id] === 'undefined')
             return undefined;
-        return get(id);
+        return _get(id);
     };
     /*
      * @param {string} val
@@ -90,7 +90,7 @@ const poolBase=function(limitIn){
     this.add=function(val){
         if(typeof val === 'undefined')
             return false;
-        return add(val);
+        return _add(val);
     };
     /*
      * @param {string} id 
@@ -103,7 +103,7 @@ const poolBase=function(limitIn){
             return false;
         if(typeof val === 'undefined')
             return false;
-        return set(id, val);
+        return _set(id, val);
     };
     /*
      * @param {string} id 
@@ -116,10 +116,10 @@ const poolBase=function(limitIn){
             return false;
         if(typeof val === 'undefined')
             return false;
-        if(typeof db[id] === 'undefined')
+        if(typeof _db[id] === 'undefined')
             return false;
-        db[id] = val;
-        updateLastSet();
+        _db[id] = val;
+        _updateLastSet();
         return true; 
     };
     /*
@@ -130,10 +130,10 @@ const poolBase=function(limitIn){
     this.del=function(id){
         if(typeof id !== 'string')
             return false;
-        if(typeof db[id] === 'undefined')
+        if(typeof _db[id] === 'undefined')
             return false;
-        delete db[id];
-        updateLastSet();
+        delete _db[id];
+        _updateLastSet();
         return true;
     };
     /*
@@ -144,7 +144,7 @@ const poolBase=function(limitIn){
     this.check=function(id){
         if(
             (typeof id !== 'string') ||
-            (typeof db[id] === 'undefined')
+            (typeof _db[id] === 'undefined')
         )
             return false;
         return true;
@@ -154,7 +154,7 @@ const poolBase=function(limitIn){
      * @return {boolean}
      */
     this.empty=function(){
-        if( 0 === parseInt(count()))
+        if( 0 === parseInt(_count()))
             return true;
         return false;
     };
@@ -163,22 +163,22 @@ const poolBase=function(limitIn){
      * @return integer
      */
     this.size=function(){
-        return count();
+        return _count();
     };
     /*
      * @public
      * @return {object}
      */
     this.stats=function(){
-        count();
-        return stats;
+        _count();
+        return _stats;
     };
     /*
      * @public
      * @return {void}
      */
     this.drop=function(){
-        drop();
+        _drop();
     };
     /*
      * @param {object}
@@ -187,15 +187,15 @@ const poolBase=function(limitIn){
      */
     this.importing = function(importDb){
         if(typeof importDb.all === 'function')
-            db = importDb.all();
-        db = importDb;
+            _db = importDb.all();
+        _db = importDb;
         return true;
     };
     /*
      * @private
      * @return {string}
      */
-    let randomChar=function(){
+    const _randomChar=function(){
         return Math.floor(
             Math.random()*36
         ).toString(36);
@@ -204,44 +204,44 @@ const poolBase=function(limitIn){
      * @private
      * @return {string}
      */
-    let newId = function (){
-        let id = randomChar()+serial.toString(32)+randomChar();
-        serial++;
+    const _newId = function (){
+        let id = _randomChar()+_serial.toString(32)+_randomChar();
+        _serial++;
         return id;
     };
     /*
      * @private
      * @return {boolean}
      */
-    let updateLastGet = function (){
-        stats.lastSet = Date.now();
+    const _updateLastGet = function (){
+        _stats.lastSet = Date.now();
         return true;
     };
     /*
      * @private
      * @return {boolean}
      */
-    let updateLastSet = function (){
-        stats.lastSet = Date.now();
+    const _updateLastSet = function (){
+        _stats.lastSet = Date.now();
         return true;
     };
     /*
      * @private
      * @return {integer}
-     */
-    let count = function (){
-        if(stats.lastCount > stats.lastSet)
-            return stats.count;
+     */ 
+    const _count = function (){
+        if(_stats.lastCount > _stats.lastSet)
+            return _stats.count;
         let out = 0;
         let index = 0;
-        for(let i in db){
+        for(let i in _db){
             out++;
             index+=i.length;
         }
-        stats.count     = out;
-        stats.index     = index;
-        stats.bytes     = JSON.stringify(db).toString().length;
-        stats.lastCount = Date.now();
+        _stats.count     = out;
+        _stats.index     = index;
+        _stats.bytes     = JSON.stringify(_db).toString().length;
+        _stats.lastCount = Date.now();
         return out;
     };
     /*
@@ -249,35 +249,35 @@ const poolBase=function(limitIn){
      * @var {dictonary}
      *
      */
-    let dbHits = {};
-    let initStamp = Date.now();
+    let _db_hits = {};
+    let _init_stamp = Date.now();
     /*
      * @private
      * @var {dictonary}
      *
      */
-    let stats = {
+    let _stats = {
         count:0,
         bytes:0,
         index:0,
-        start:parseInt(initStamp),
-        lastSet:parseInt(initStamp),
-        lastGet:parseInt(initStamp),
-        lastCount:parseInt(initStamp)
+        start:parseInt(_init_stamp),
+        lastSet:parseInt(_init_stamp),
+        lastGet:parseInt(_init_stamp),
+        lastCount:parseInt(_init_stamp)
     };
     /*
      * @private
      * @return {boolean}
      */
-    let overflowCheck = function (){
-        if(limit === 0)
+    const _overflowCheck = function (){
+        if(_limit === 0)
             return true;
-        let size = count();
-        if (limit > size)
+        let size = _count();
+        if (_limit > size)
             return true;
-        let overdo = count - limit;
-        for(let i in db){
-            delete db[i];
+        let overdo = size - _limit;
+        for(let i in _db){
+            delete _db[i];
             overdo--;
             if(1>overdo)
                 return true;
@@ -287,41 +287,41 @@ const poolBase=function(limitIn){
      * @private
      * @return {void}
      */
-    let drop = function () {
-        db = {};
+    const _drop = function () {
+        _db = {};
     };
     /*
      * @private
      * @var {dictonary}
      */
-    let db = {};
+    let _db = {};
     /*
      * @private
      * @var {integer}
      */
-    let serial = 0;
+    let _serial = 0;
     /*
      * @private
      * @var {integer}
      */
-    let limit = 100;
+    let _limit = 10000;
 
 
     /*
      * @param {string} id
      * @pirivate
      */
-    const hitUpdate = function(id){
+    const _hitUpdate = function(id){
         const now = Math.round(Date.now()/1000);
-        if(typeof dbHits[id] === 'undefined'){
-            dbHits[id] = {
+        if(typeof _db_hits[id] === 'undefined'){
+            _db_hits[id] = {
                 first : parseInt(now),
                 last  : parseInt(now),
                 hit   : 0
             };
         }else{
-            dbHits[id].last = now;
-            dbHits[id].hit++;
+            _db_hits[id].last = now;
+            _db_hits[id].hit++;
         }
     };
     /*
@@ -329,9 +329,9 @@ const poolBase=function(limitIn){
      * @public
      * @return {string}
      */
-    const add=function(val){
-        let id = newId();
-        set(id, val);
+    const _add=function(val){
+        let id = _newId();
+        _set(id, val);
         return id;
     };
 
@@ -341,11 +341,11 @@ const poolBase=function(limitIn){
      * @pirivate
      * @return {bool}
      */
-    const set=function(id, val){
-        db[id] = val;
-        hitUpdate(id);
-        updateLastSet();
-        overflowCheck();
+    const _set=function(id, val){
+        _db[id] = val;
+        _hitUpdate(id);
+        _updateLastSet();
+        _overflowCheck();
         return true; 
     };
     /*
@@ -353,17 +353,17 @@ const poolBase=function(limitIn){
      * @public
      * @return {mixed}
      */
-    const get=function(id){
-        hitUpdate(id);
-        updateLastGet();
-        return db[id];
+    const _get=function(id){
+        _hitUpdate(id);
+        _updateLastGet();
+        return _db[id];
     };
     if (
         (typeof limitIn !== 'undefined')&&
        (parseInt(limitIn) === limitIn)&&
        (limitIn > 0)
     )
-        limit = limitIn;
+        _limit = limitIn;
     //costructor
 };
 
