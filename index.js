@@ -3,6 +3,8 @@
  */
 'use strict';
 
+const $clonerc = new (require('clonerc')).base();
+
 /*
  * @param {integer} limitIn //maximum size of package
  * @prototype
@@ -356,7 +358,7 @@ const poolBase=function(limitIn){
     const _get=function(id){
         _hitUpdate(id);
         _updateLastGet();
-        return _db[id];
+        return $clonerc.faster(db[id]);
     };
     if (
         (typeof limitIn !== 'undefined')&&

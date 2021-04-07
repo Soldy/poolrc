@@ -27,5 +27,8 @@
     "sandboxrc": "^0.9.9-beta15",
     "setuprc": "^0.9.9-beta16",
     "typehardeningrc": "^0.9.9-beta15"
+  },
+  "dependencies": {
+    "clonerc": "0.0.1"
   }
 }
