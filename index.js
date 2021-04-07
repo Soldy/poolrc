@@ -27,10 +27,8 @@ const poolBase=function(limitIn){
             );
             size --;
             if(1>size)
-                break;
-
+                return out;
         }
-        return out;
     };
     /*
      * @param {integer} size
