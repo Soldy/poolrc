@@ -20,7 +20,11 @@ const poolBase=function(limitIn){
             size = 1;
         let out = [];
         for(let i in _db){
-            out.push(_db[i]);
+            out.push(
+                $clonerc.faster(
+                    _db[i]
+                )
+            );
             size --;
             if(1>size)
                 break;
@@ -41,7 +45,11 @@ const poolBase=function(limitIn){
         for(let i in _db){
             notout --;
             if(1>notout)
-                out.push(_db[i]);
+                out.push(
+                    $clonerc.faster(
+                        _db[i]
+                    )
+                );
         }
         return out;
     };
@@ -50,7 +58,7 @@ const poolBase=function(limitIn){
      * @return {object}
      */
     this.full=function(){
-        return {..._db};
+        return $clonerc.clone(_db);
     };
     /*
      * @public
@@ -59,7 +67,11 @@ const poolBase=function(limitIn){
     this.all=function(){
         let list = [];
         for (let i in _db)
-            list.push(_db[i]);
+            list.push(
+                $clonerc.clone(
+                    _db[i]
+                )
+            );
         return list;
     };
     /*
@@ -190,7 +202,7 @@ const poolBase=function(limitIn){
     this.importing = function(importDb){
         if(typeof importDb.all === 'function')
             _db = importDb.all();
-        _db = importDb;
+        _db = $clonerc.clone(importDb);
         return true;
     };
     /*
@@ -358,7 +370,9 @@ const poolBase=function(limitIn){
     const _get=function(id){
         _hitUpdate(id);
         _updateLastGet();
-        return $clonerc.faster(db[id]);
+        return $clonerc.clone(
+            _db[id]
+        );
     };
     if (
         (typeof limitIn !== 'undefined')&&
