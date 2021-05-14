@@ -1,6 +1,6 @@
 {
   "name": "poolrc",
-  "version": "1.0.0-rc4",
+  "version": "1.0.0-rc5",
   "description": "pool manager",
   "main": "index.js",
   "scripts": {
@@ -18,15 +18,7 @@
   },
   "homepage": "https://github.com/Soldy/poolrc#readme",
   "devDependencies": {
-    "assertrc": "^1.0.2-rc2",
-    "consolebarrc": "0.0.2-rc3",
-    "consolestdiorc": "0.0.2-rc2",
-    "consolestylerc": "0.0.2-rc2",
-    "nano-test-output-cli": "^0.9.9-beta17",
-    "nanoTest": "^0.9.9-beta15",
-    "sandboxrc": "^0.9.9-beta15",
-    "setuprc": "^0.9.9-beta16",
-    "typehardeningrc": "^0.9.9-beta15"
+    "nanoTest": "^0.9.9-beta21"
   },
   "dependencies": {
     "clonerc": "0.0.1"

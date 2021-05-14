@@ -354,7 +354,7 @@ const poolBase=function(limitIn){
      * @return {bool}
      */
     const _set=function(id, val){
-        _db[id] = val;
+        _db[id.toString()] = $clonerc.clone(val);
         _hitUpdate(id);
         _updateLastSet();
         _overflowCheck();
