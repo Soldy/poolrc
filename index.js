@@ -3,6 +3,7 @@
  */
 'use strict';
 
+const fs = require('fs');
 const $clonerc = new (require('clonerc')).base();
 
 /*
@@ -21,13 +22,13 @@ const poolBase=function(limitIn){
         let out = [];
         for(let i in _db){
             out.push(
-                $clonerc.faster(
+                $clonerc.clone(
                     _db[i]
                 )
             );
             size --;
             if(1>size)
-                return out;
+                return out[0];
         }
     };
     /*
@@ -44,33 +45,35 @@ const poolBase=function(limitIn){
             notout --;
             if(1>notout)
                 out.push(
-                    $clonerc.faster(
+                    $clonerc.clone(
                         _db[i]
                     )
                 );
         }
-        return out;
+        return out[
+            out.length - 1
+        ];
     };
+    /*
+     * @public
+     */
+    this.refit=function(){
+        _db = _full();
+        return true;
+    }
     /*
      * @public
      * @return {object}
      */
     this.full=function(){
-        return $clonerc.clone(_db);
+        return _full();
     };
     /*
      * @public
      * @return {object}
      */
     this.all=function(){
-        let list = [];
-        for (let i in _db)
-            list.push(
-                $clonerc.clone(
-                    _db[i]
-                )
-            );
-        return list;
+        return _all();
     };
     /*
      * @public
@@ -198,11 +201,31 @@ const poolBase=function(limitIn){
      * @return {boolean}
      */
     this.importing = function(importDb){
-        if(typeof importDb.all === 'function')
-            _db = importDb.all();
+        if(typeof importDb.full === 'function')
+            _db = importDb.full();
         _db = $clonerc.clone(importDb);
         return true;
     };
+    /*
+     * @param {string} file
+     * @private
+     * @return {object}
+     */
+    this.load = async function(file){
+        if(typeof file === 'undefined')
+            return false;
+        return await _load(file);
+    }
+    /*
+     * @param {string} file
+     * @private
+     * @return {object}
+     */
+    this.save = async function(file){
+        if(typeof file === 'undefined')
+            return false;
+        return await _save(file);
+    }
     /*
      * @private
      * @return {string}
@@ -217,7 +240,11 @@ const poolBase=function(limitIn){
      * @return {string}
      */
     const _newId = function (){
-        let id = _randomChar()+_serial.toString(32)+_randomChar();
+        const id = (
+            _randomChar()+
+            _serial.toString(32)+
+            _randomChar()
+        ).toString();
         _serial++;
         return id;
     };
@@ -342,9 +369,9 @@ const poolBase=function(limitIn){
      * @return {string}
      */
     const _add=function(val){
-        let id = _newId();
+        const  id = _newId();
         _set(id, val);
-        return id;
+        return id.toString();
     };
 
     /*
@@ -371,6 +398,60 @@ const poolBase=function(limitIn){
         return $clonerc.clone(
             _db[id]
         );
+    };
+    /*
+     * @private
+     * @return {object}
+     */
+    const _full=function(){
+        let db = {};
+        for (let i in _db)
+            db[i]=$clonerc.clone(
+                _db[i]
+            );
+        return db;
+    };
+    /*
+     * @private
+     * @return {object}
+     */
+    const _all=function(){
+        let list = [];
+        for (let i in _db)
+            list.push(
+                $clonerc.clone(
+                    _db[i]
+                )
+            );
+        return list;
+    };
+    /*
+     * @param {string} file
+     * @private
+     * @return {object}
+     */
+    const _load = async function(file){
+        _db = JSON.parse(fs.readFileSync(
+             file, 
+            'utf8'
+        ));
+        return true;
+
+    };
+    /*
+     * @param {string} file
+     * @private
+     * @return {object}
+     */
+    const _save = async function(file){
+        let out = true;
+        await fs.writeFileSync(
+            file,
+            JSON.stringify(
+                _full()
+            )
+        );
+        return out;
     };
     if (
         (typeof limitIn !== 'undefined')&&
