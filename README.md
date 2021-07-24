@@ -156,3 +156,22 @@ let response = poolManager.size();
 
 ```
 
+## save full data backup
+
+
+```javascript
+
+poolManager.save(file_name);
+
+
+```
+
+## load full data backup
+
+
+```javascript
+
+poolManager.load(file_name);
+
+
+```
