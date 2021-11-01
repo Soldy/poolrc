@@ -252,16 +252,18 @@ const poolBase=function(limitIn){
      * @private
      * @return {boolean}
      */
-    const _updateLastGet = function (){
-        _stats.lastSet = Date.now();
+    const _updateLastGet = function (id){
+        _stats.lastGet = Date.now();
+        _track_last_get[id] = parseInt(_stats.lastGet);
         return true;
     };
     /*
      * @private
      * @return {boolean}
      */
-    const _updateLastSet = function (){
+    const _updateLastSet = function (id){
         _stats.lastSet = Date.now();
+        _track_last_set[id] = parseInt(_stats.lastSet);
         return true;
     };
     /*
@@ -336,6 +338,16 @@ const poolBase=function(limitIn){
     let _db = {};
     /*
      * @private
+     * @var {dictonary}
+     */
+    let _track_last_set = {};
+    /*
+     * @private
+     * @var {dictonary}
+     */
+    let _track_last_get = {};
+    /*
+     * @private
      * @var {integer}
      */
     let _serial = 0;
@@ -383,7 +395,7 @@ const poolBase=function(limitIn){
     const _set=function(id, val){
         _db[id.toString()] = $clonerc.clone(val);
         _hitUpdate(id);
-        _updateLastSet();
+        _updateLastSet(id);
         _overflowCheck();
         return true; 
     };
@@ -394,7 +406,7 @@ const poolBase=function(limitIn){
      */
     const _get=function(id){
         _hitUpdate(id);
-        _updateLastGet();
+        _updateLastGet(id);
         return $clonerc.clone(
             _db[id]
         );
