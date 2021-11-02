@@ -4,6 +4,7 @@
 'use strict';
 
 const fs = require('fs');
+const $setuprc = require('setuprc').base;
 const $clonerc = new (require('clonerc')).base();
 
 /*
@@ -147,9 +148,7 @@ const poolBase=function(limitIn){
             return false;
         if(typeof _db[id] === 'undefined')
             return false;
-        delete _db[id];
-        _updateLastSet();
-        return true;
+        return _del(id);
     };
     /*
      * @param {string}- id
@@ -353,11 +352,44 @@ const poolBase=function(limitIn){
     let _serial = 0;
     /*
      * @private
+     * @var {boolean}
+     */
+     let _timeout_check = false;
+    /*
+     * @private
+     * @var {integer}
+     */
+     let _timeout = 0;
+    /*
+     * @private
      * @var {integer}
      */
     let _limit = 10000;
-
-
+    /*
+     *  @private
+     *  @const {object}
+     */
+    const _setup_json = {
+        'limit':{
+            'type'    : 'integer',
+            'default' : 10000
+        },
+        'timeout':{
+            'type'    : 'integer',
+            'default' : 3600
+        },
+        'timeout_check'{
+            'type'    : 'boolean',
+            'default' : false
+        }
+    };
+    /*
+     *  @private
+     *  @const {setuprc}
+     */
+    const _setup = new $setuprc(
+        _setup_json
+    );
     /*
      * @param {string} id
      * @pirivate
@@ -405,11 +437,44 @@ const poolBase=function(limitIn){
      * @return {mixed}
      */
     const _get=function(id){
+        if(_timeout_check)
+            if(_timeoutCheck(id))
+                return undefined;
         _hitUpdate(id);
         _updateLastGet(id);
         return $clonerc.clone(
             _db[id]
         );
+    };
+    /*
+     * @param {string} id
+     * @private
+     * @return {mixed}
+     */
+    const _del=function(id){
+        delete _db[id];
+        if(typeof _track_last_get[id] !== 'undefined')
+            delete _track_last_get[id];
+        if(typeof _track_last_set[id] !== 'undefined')
+            delete _track_last_set[id];
+        return true;
+    };
+    /*
+     * @param {string} id
+     * @private
+     * @return {mixed}
+     */
+    const _timeoutCheck=function(id){
+        if(
+            ((Date.now() -_track_last_set[id]) > _timeout)&&
+            ( 
+                (typeof _track_last_get[id] === 'undefined') ||
+                ((Date.now() -_track_last_get[id]) > _timeout)
+
+            )
+        )
+            return _del(id);
+        return false;
     };
     /*
      * @private
@@ -465,13 +530,20 @@ const poolBase=function(limitIn){
         );
         return out;
     };
-    if (
-        (typeof limitIn !== 'undefined')&&
-       (parseInt(limitIn) === limitIn)&&
-       (limitIn > 0)
-    )
-        _limit = limitIn;
     //costructor
+    if (
+        (typeof settings !== 'number')&&
+        (Number.isInteger(settings))&&
+        (settings > 0)
+    ){
+        _limit = settings;
+    }else if ( typeof settings !== 'undefined' ){
+        _setup.setup(settings);
+        _limit = _setup.get('limit');
+        _timeout = _setup.get('timeout');
+        _timeout_check = _setup.get('timeout_check');
+    }
+
 };
 
 exports.base = poolBase;

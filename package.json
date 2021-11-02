@@ -1,6 +1,6 @@
 {
   "name": "poolrc",
-  "version": "1.0.0-rc6",
+  "version": "1.0.0-rc7",
   "description": "pool manager",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "nanoTest": "^0.9.9-beta21"
   },
   "dependencies": {
-    "clonerc": "0.0.1"
+    "clonerc": "0.0.1",
+    "setuprc": "^0.9.9-beta19"
   }
 }
