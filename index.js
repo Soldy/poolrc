@@ -378,7 +378,7 @@ const poolBase=function(limitIn){
             'type'    : 'integer',
             'default' : 3600
         },
-        'timeout_check'{
+        'timeout_check':{
             'type'    : 'boolean',
             'default' : false
         }
@@ -532,7 +532,7 @@ const poolBase=function(limitIn){
     };
     //costructor
     if (
-        (typeof settings !== 'number')&&
+        (typeof settings === 'number')&&
         (Number.isInteger(settings))&&
         (settings > 0)
     ){
