@@ -11,49 +11,20 @@ const $clonerc = new (require('clonerc')).base();
  * @param {integer} limitIn //maximum size of package
  * @prototype
  */
-const poolBase=function(limitIn){
+const poolBase=function(settings){
     /*
-     * @param {integer} size
      * @public
      * @return {mixed}
      */
-    this.first = function (size){
-        if(typeof size === 'undefined')
-            size = 1;
-        let out = [];
-        for(let i in _db){
-            out.push(
-                $clonerc.clone(
-                    _db[i]
-                )
-            );
-            size --;
-            if(1>size)
-                return out[0];
-        }
+    this.first = function (){
+        return _first();
     };
     /*
-     * @param {integer} size
      * @public
      * @return {mixed}
      */
-    this.last = function (size){
-        if(typeof size === 'undefined')
-            size = 1;
-        let out = [];
-        let notout =  _count()-size;
-        for(let i in _db){
-            notout --;
-            if(1>notout)
-                out.push(
-                    $clonerc.clone(
-                        _db[i]
-                    )
-                );
-        }
-        return out[
-            out.length - 1
-        ];
+    this.last = function (){
+        return _last();
     };
     /*
      * @public
@@ -212,6 +183,8 @@ const poolBase=function(limitIn){
      */
     this.load = async function(file){
         if(typeof file === 'undefined')
+            file = _setup.get('file');
+        if(typeof file === 'undefined')
             return false;
         return await _load(file);
     }
@@ -221,6 +194,8 @@ const poolBase=function(limitIn){
      * @return {object}
      */
     this.save = async function(file){
+        if(typeof file === 'undefined')
+            file = _setup.get('file');
         if(typeof file === 'undefined')
             return false;
         return await _save(file);
@@ -381,6 +356,10 @@ const poolBase=function(limitIn){
         'timeout_check':{
             'type'    : 'boolean',
             'default' : false
+        },
+        'file' : {
+            'type'    : 'string',
+            'default' : 'poolrc.jsonplr'
         }
     };
     /*
@@ -447,6 +426,31 @@ const poolBase=function(limitIn){
         );
     };
     /*
+     * @private
+     * @return {mixed}
+     */
+    const _first = function (){
+        for(let i in _db){
+            return $clonerc.clone(
+                _db[i]
+            );
+        }
+    };
+    /*
+     * @private
+     * @return {mixed}
+     */
+    const _last = function (){
+        let notout =  _count();
+        for(let i in _db){
+            notout --;
+            if(1>notout)
+                return $clonerc.clone(
+                    _db[i]
+                );
+        }
+    };
+    /*
      * @param {string} id
      * @private
      * @return {mixed}
@@ -487,6 +491,20 @@ const poolBase=function(limitIn){
                 _db[i]
             );
         return db;
+    };
+    /*
+     * @private
+     * @return {object}
+     */
+    const _list=function(){
+        let list = [];
+        for (let i in _db)
+            list.push(
+                $clonerc.clone(
+                    i
+                )
+            );
+        return list;
     };
     /*
      * @private
