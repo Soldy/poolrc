@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Soldy/poolrc#readme",
   "devDependencies": {
-    "nanoTest": "0.9.9-beta26"
+    "nanoTest": "0.9.9-beta28"
   },
   "dependencies": {
     "clonerc": "0.0.5",
