@@ -1,7 +1,8 @@
 
 # poolrc 
 
-The poolrc is a data pooling tool for science projects
+The synchronized limited-size pool is a big problem for me. We can use an array to count the pool size after every change. But in this case, we need this function to build whenever we need it. That's not a small task if we need size limit support, timeout support, and event support.\
+The poolrc does this for you.
 
 
 ## init
