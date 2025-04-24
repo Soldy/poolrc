@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const fs = require('fs');
+const fs = require('node:fs/promises');
 const $setuprc = require('setuprc').base;
 const $clonerc = new (require('clonerc')).base();
 
@@ -526,8 +526,8 @@ const poolBase=function(settings){
      * @return {object}
      */
     const _load = async function(file){
-        _db = JSON.parse(fs.readFileSync(
-             file, 
+        _db = JSON.parse(await fs.readFile(
+             file,
             'utf8'
         ));
         return true;
@@ -540,7 +540,7 @@ const poolBase=function(settings){
      */
     const _save = async function(file){
         let out = true;
-        await fs.writeFileSync(
+        await fs.writeFile(
             file,
             JSON.stringify(
                 _full()
